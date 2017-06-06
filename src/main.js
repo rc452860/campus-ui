@@ -28,13 +28,11 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     //NProgress.start();
     if (to.path == '/login') {
-        sessionStorage.removeItem('access_token');
-        sessionStorage.removeItem('token_type');
-        sessionStorage.removeItem('scope');
+        sessionStorage.removeItem('login');
     }
-    let token = sessionStorage.getItem('access_token');
-    console.log(token)
-    if (!token && to.path != '/login') {
+    let login = sessionStorage.getItem('login');
+    console.log(login)
+    if (!login && to.path != '/login') {
         next({path: '/login'})
     } else {
         next()

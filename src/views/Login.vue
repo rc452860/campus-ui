@@ -25,8 +25,8 @@
             return {
                 logining: false,
                 ruleForm2: {
-                    account: 'admin',
-                    checkPass: 'admin'
+                    account: '110103199005070931',
+                    checkPass: '110103199005070931'
                 },
                 rules2: {
                     account: [
@@ -52,25 +52,25 @@
                         //_this.$router.replace('/table');
                         this.logining = true;
                         //NProgress.start();
-                        var loginParams = {username: this.ruleForm2.account, password: this.ruleForm2.checkPass,mode:mode.student};
+                        var loginParams = {username: this.ruleForm2.account, password: this.ruleForm2.checkPass};
                         requestLogin(loginParams).then(response => {
                             console.log(response)
                             this.logining = false;
                             //NProgress.done();
-                            let {access_token, token_type, scope} = response.data;
-                            if (response.status !== 200) {
+                            let {status,data,descript} = response.data;
+                            if (response.status !== 200 || status != "success") {
                                 this.$message({
-                                    message: response.data,
+                                    message: response.msg,
                                     type: 'error'
                                 });
                             } else {
-                                sessionStorage.setItem('access_token', access_token);
-                                sessionStorage.setItem('token_type', token_type);
-                                sessionStorage.setItem('scope', scope);
+                                var cpIcardNo = data.cpIdCardNo;
+                                sessionStorage.setItem("login",cpIcardNo)
                                 this.$router.push({path: '/table'});
                             }
                         }).catch(error => {
                             this.$message({
+
                                 message:error.data,
                                 type:'error'
                             })

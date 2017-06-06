@@ -1,15 +1,9 @@
 <template>
-    <el-form  ref="form" :model="form" label-width="80px" @submit.prevent="onSubmit"
+    <el-form ref="form" :model="form" label-width="80px" @submit.prevent="onSubmit"
              style="margin:20px;width:60%;min-width:600px;">
-        <el-form-item  label="活动名称">
-          <el-row>
-            <el-col :span="11">
-              <el-input v-model="form.name"></el-input>
-            </el-col>
-            <el-col :offset="2"  :span="11">
-              <el-input v-model="form.name"></el-input>
-            </el-col>
-          </el-row>
+        <el-form-item label="活动名称">
+            <el-input v-model="form.name"></el-input>
+          <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="活动区域">
             <el-select v-model="form.region" placeholder="请选择活动区域">
@@ -56,13 +50,8 @@
 </template>
 
 <script>
-  import ElCol from "element-ui/packages/col/src/col";
-  import ElRow from "element-ui/packages/row/src/row";
     export default {
-      components: {
-        ElRow,
-        ElCol},
-      data() {
+        data() {
             return {
                 form: {
                     name: '',

@@ -2,13 +2,14 @@ const Login = r => require.ensure([], () => r(require('./views/Login.vue')), 'gr
 const NotFound = r => require.ensure([], () => r(require('./views/404.vue')), 'group-index')
 const Home = r => require.ensure([], () => r(require('./views/Home.vue')), 'group-index')
 const Main = r => require.ensure([], () => r(require('./views/Main.vue')), 'group-index')
-const Table = r => require.ensure([], () => r(require('./views/nav1/Table.vue')), 'group-nav1')
+const Table = r => require.ensure([], () => r(require('./views/nav1/Table.vue')), 'gra')
 const Form = r => require.ensure([], () => r(require('./views/nav1/Form.vue')), 'group-nav1')
 const User = r => require.ensure([], () => r(require('./views/nav1/User.vue')), 'group-nav1')
 const Page4 = r => require.ensure([], () => r(require('./views/nav2/Page4.vue')), 'group-nav2')
 const Page5 = r => require.ensure([], () => r(require('./views/nav2/Page5.vue')), 'group-nav2')
 const Page6 = r => require.ensure([], () => r(require('./views/nav3/Page6.vue')), 'group-nav3')
 const echarts = r => require.ensure([], () => r(require('./views/charts/echarts.vue')), 'group-charts')
+const CpStudent = r=>require.ensure([],()=>r(require('./views/nav1/CpStudents.vue')),'group-nav1')
 
 let routes = [
     {
@@ -34,9 +35,10 @@ let routes = [
             {path: '/table', component: Table, name: 'Table'},
             {path: '/form', component: Form, name: 'Form'},
             {path: '/user', component: User, name: '列表'},
+            {path:"/cpStudent",component:CpStudent,name:'学生列表'}
         ]
     },
-    {
+    /*{
         path: '/',
         component: Home,
         name: '导航二',
@@ -69,7 +71,7 @@ let routes = [
         path: '*',
         hidden: true,
         redirect: {path: '/404'}
-    }
+    }*/
 ];
 
 export default routes;

@@ -7,28 +7,27 @@ axios.defaults.validateStatus = status => {
     return status < 404;
 }
 
-axios.interceptors.request.use(function (config) {
-    const token = sessionStorage.getItem("access_token");
-    console.log(token);
-
-    if (token != null) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-}, function (err) {
-    return Promise.reject(err);
-});
+// axios.interceptors.request.use(function (config) {
+//     const token = sessionStorage.getItem("login");
+//     console.log(token);
+//
+//     if (token != null) {
+//         config.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return config;
+// }, function (err) {
+//     return Promise.reject(err);
+// });
 export const mode = {
     teacher: {username: "teacher", password: ""},
     student: {username: "student", password: ""},
 }
 
 export const requestLogin = params => {
-    return axios.post(`${base}/token`, stringify({grant_type: "password", ...params}), {
-        auth: {
-          username: mode.student.username, password: mode.student.password
-        }, withCredentials: true
-    })
+    return axios.post(`${base}/user/login`, params)
+};
+export const getStudentList = params => {
+  return axios.get(`${base}/user`, {params: params});
 };
 
 export const getUserList = params => {
