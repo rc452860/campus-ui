@@ -11,33 +11,69 @@ const Page6 = r => require.ensure([], () => r(require('./views/nav3/Page6.vue'))
 const echarts = r => require.ensure([], () => r(require('./views/charts/echarts.vue')), 'group-charts')
 const CpStudent = r=>require.ensure([],()=>r(require('./views/nav1/CpStudents.vue')),'group-nav1')
 
+/*学生端*/
+const StudentList = r=>require.ensure([],()=>r(require('./student/views/CpStudents.vue')),'student')
+const StudentLogin = r=>require.ensure([],()=>r(require('./student/views/Login.vue')),'student')
+const StudentHome = r=>require.ensure([],()=>r(require('./student/views/Home.vue')),'student')
+
+
 let routes = [
-    {
-        path: '/login',
-        component: Login,
-        name: '',
-        hidden: true
-    },
-    {
-        path: '/404',
-        component: NotFound,
-        name: '',
-        hidden: true
-    },
-    //{ path: '/main', component: Main },
-    {
-        path: '/',
-        component: Home,
-        name: '导航一',
-        iconCls: 'el-icon-message',//图标样式class
-        children: [
-            {path: '/main', component: Main, name: '主页', hidden: true},
-            {path: '/table', component: Table, name: 'Table'},
-            {path: '/form', component: Form, name: 'Form'},
-            {path: '/user', component: User, name: '列表'},
-            {path:"/cpStudent",component:CpStudent,name:'学生列表'}
-        ]
-    },
+    // {
+    //     path: '/login',
+    //     component: Login,
+    //     name: '',
+    //     hidden: true
+    // },
+    // {
+    //     path: '/404',
+    //     component: NotFound,
+    //     name: '',
+    //     hidden: true
+    // },
+    // //{ path: '/main', component: Main },
+    // {
+    //     path: '/',
+    //     component: Home,
+    //     name: '导航一',
+    //     iconCls: 'el-icon-message',//图标样式class
+    //     children: [
+    //         {path: '/main', component: Main, name: '主页', hidden: true},
+    //         {path: '/table', component: Table, name: 'Table'},
+    //         {path: '/form', component: Form, name: 'Form'},
+    //         {path: '/user', component: User, name: '列表'},
+    //         {path:"/cpStudent",component:CpStudent,name:'学生列表'}
+    //     ]
+    // },
+  {
+    path: '/student',
+    component: StudentHome,
+    name: '学生功能',
+    iconCls: 'el-icon-message',//图标样式class
+    children: [
+      {path:"/student/list",component:StudentList,name:'学生列表'}
+    ]
+  },
+  {
+    path: '/student/login',
+    component: StudentLogin,
+    name: '',
+    hidden: true
+  },
+  {
+    path: '/student',
+    component: StudentHome,
+    name: '学生功能',
+    iconCls: 'el-icon-message',//图标样式class
+    children: [
+      {path:"/student/list",component:StudentList,name:'学生列表'}
+    ]
+  },
+  {
+    path: '/student/login',
+    component: StudentLogin,
+    name: '',
+    hidden: true
+  }
     /*{
         path: '/',
         component: Home,
