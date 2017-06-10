@@ -24,14 +24,18 @@ export const mode = {
 }
 
 export const requestLogin = params => {
-    return axios.post(`${base}/user/login`, params)
+    return axios.post(`${base}/student/login`, params)
 };
 export const getStudentList = params => {
-  return axios.get(`${base}/user`, {params: params});
+  return axios.get(`${base}/student/list`, {params: params});
 };
 
 export const getUserList = params => {
-    return axios.get(`${base}/user/all`, {params: params});
+    return axios.get(`${base}/student/all`, {params: params});
+};
+
+export const getAcademyByname = params =>{
+    return axios.get(`${base}/academy`,{params:params})
 };
 
 // export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };

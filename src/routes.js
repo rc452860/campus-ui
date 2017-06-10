@@ -1,6 +1,6 @@
 const Login = r => require.ensure([], () => r(require('./views/Login.vue')), 'group-index')
 const NotFound = r => require.ensure([], () => r(require('./views/404.vue')), 'group-index')
-const Home = r => require.ensure([], () => r(require('./views/Home.vue')), 'group-index')
+const Home = r => require.ensure([], () => r(require('./views/Index.vue')), 'group-index')
 const Main = r => require.ensure([], () => r(require('./views/Main.vue')), 'group-index')
 const Table = r => require.ensure([], () => r(require('./views/nav1/Table.vue')), 'gra')
 const Form = r => require.ensure([], () => r(require('./views/nav1/Form.vue')), 'group-nav1')
@@ -9,27 +9,30 @@ const Page4 = r => require.ensure([], () => r(require('./views/nav2/Page4.vue'))
 const Page5 = r => require.ensure([], () => r(require('./views/nav2/Page5.vue')), 'group-nav2')
 const Page6 = r => require.ensure([], () => r(require('./views/nav3/Page6.vue')), 'group-nav3')
 const echarts = r => require.ensure([], () => r(require('./views/charts/echarts.vue')), 'group-charts')
-const CpStudent = r=>require.ensure([],()=>r(require('./views/nav1/CpStudents.vue')),'group-nav1')
 
+/*通用*/
+const Index = r=>require.ensure([],()=>r(require('./views/Index.vue')),'common')
 /*学生端*/
 const StudentList = r=>require.ensure([],()=>r(require('./student/views/CpStudents.vue')),'student')
 const StudentLogin = r=>require.ensure([],()=>r(require('./student/views/Login.vue')),'student')
 const StudentHome = r=>require.ensure([],()=>r(require('./student/views/Home.vue')),'student')
 
 
+
+
 let routes = [
-    // {
-    //     path: '/login',
-    //     component: Login,
-    //     name: '',
-    //     hidden: true
-    // },
-    // {
-    //     path: '/404',
-    //     component: NotFound,
-    //     name: '',
-    //     hidden: true
-    // },
+    {
+        path: '/',
+        component: Index,
+        name: '',
+        hidden: true
+    },
+    {
+        path: '*',
+        component: NotFound,
+        name: '',
+        hidden: true
+    },
     // //{ path: '/main', component: Main },
     // {
     //     path: '/',
@@ -60,16 +63,16 @@ let routes = [
     hidden: true
   },
   {
-    path: '/student',
+    path: '/teacher',
     component: StudentHome,
     name: '学生功能',
     iconCls: 'el-icon-message',//图标样式class
     children: [
-      {path:"/student/list",component:StudentList,name:'学生列表'}
+      {path:"/teacher/list",component:StudentList,name:'学生列表'}
     ]
   },
   {
-    path: '/student/login',
+    path: '/teacher/login',
     component: StudentLogin,
     name: '',
     hidden: true

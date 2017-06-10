@@ -64,24 +64,70 @@
 
     <!--编辑界面-->
     <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
-      <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="用户名" prop="name">
-          <el-input v-model="editForm.name" auto-complete="off"></el-input>
+      <el-form :model="editForm" label-width="100px" :rules="editFormRules" ref="editForm">
+        <el-form-item label="身份证号码" prop="name">
+          <el-input v-model="editForm.cpIdCardNo" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="学号">
+          <el-input v-model="editForm.cpSno" autoComplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名">
+          <el-input v-model="editForm.cpName" :min="0" :max="200"></el-input>
+        </el-form-item>
+        <el-form-item label="曾用名">
+          <el-input v-model="editForm.cpOldName" :min="0" :max="200"></el-input>
         </el-form-item>
         <el-form-item label="性别">
-          <el-radio-group v-model="editForm.sex">
-            <el-radio class="radio" :label="1">男</el-radio>
-            <el-radio class="radio" :label="0">女</el-radio>
-          </el-radio-group>
+            <el-radio class="radio" v-model="editForm.cpSex" label="男">男</el-radio>
+            <el-radio class="radio" v-model="editForm.cpSex" label="女">女</el-radio>
         </el-form-item>
-        <el-form-item label="年龄">
-          <el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
+        <el-form-item label="学院">
+          <el-select
+            v-model="editForm.cpAcademy.cpName"
+            filterable
+            remote
+            placeholder="请输入关键词"
+            :remote-method="remoteAcademy(1)"
+            :loading="academyLoading">
+            <el-option
+              v-for="item in academyData"
+              :key="item.cpId"
+              :label="item.cpName"
+              :value="item.cpId">
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="生日">
-          <el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
+        <el-form-item label="专业">
+          <el-select
+            v-model="editForm.cpMajor.cpName"
+            filterable
+            remote
+            placeholder="请输入关键词"
+            :remote-method="remoteAcademy(2)"
+            :loading="majorLoading">
+            <el-option
+              v-for="item in majorData"
+              :key="item.cpId"
+              :label="item.cpName"
+              :value="item.cpId">
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="地址">
-          <el-input type="textarea" v-model="editForm.addr"></el-input>
+        <el-form-item label="班级">
+          <el-select
+            v-model="editForm.cpClass.cpName"
+            filterable
+            remote
+            placeholder="请输入关键词"
+            :remote-method="remoteAcademy(3)"
+            :loading="classLoading">
+            <el-option
+              v-for="item in classData"
+              :key="item.cpId"
+              :label="item.cpName"
+              :value="item.cpId">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -126,9 +172,11 @@
 <script>
   import util from '../../common/js/util'
   //import NProgress from 'nprogress'
-  import {getStudentList, removeUser, batchRemoveUser, editUser, addUser} from '../../api/api';
+  import {getStudentList,getAcademyByname, removeUser, batchRemoveUser, editUser, addUser} from '../api/api';
+  import ElInput from "../../../node_modules/element-ui/packages/input/src/input";
 
   export default {
+    components: {ElInput},
     data() {
       return {
         filters: {
@@ -145,7 +193,6 @@
         first: false,
         listLoading: false,
         sels: [],//列表选中列
-
         editFormVisible: false,//编辑界面是否显示
         editLoading: false,
         editFormRules: {
@@ -155,12 +202,10 @@
         },
         //编辑界面数据
         editForm: {
-          id: 0,
-          name: '',
-          sex: -1,
-          age: 0,
-          birth: '',
-          addr: ''
+          cpSex:"男",
+          cpAcademy:[],
+          cpMajor:[],
+          cpClass:[]
         },
 
         addFormVisible: false,//新增界面是否显示
@@ -177,8 +222,14 @@
           age: 0,
           birth: '',
           addr: ''
-        }
+        },
 
+        academyLoading:false,
+        academyData:[],
+        majorLoading:false,
+        majorData:[],
+        classLoading:false,
+        classData:[]
       }
     },
     methods: {
@@ -201,7 +252,7 @@
         getStudentList(para).then((res) => {
           if (res.status != 200) {
             this.$message({
-              message: res.data.error_description,
+              message: res.data.descript,
               type: 'error'
             });
           } else {
@@ -251,6 +302,7 @@
       //显示编辑界面
       handleEdit: function (index, row) {
         this.editFormVisible = true;
+        console.log(row)
         this.editForm = Object.assign({}, row);
       },
       //显示新增界面
@@ -336,6 +388,62 @@
         }).catch(() => {
 
         });
+      },
+      remoteAcademy(rank){
+        return (query)=>{
+          if(query!=""){
+            this.setSelectLoading(true,rank);
+            getAcademyByname({name:query,rank:rank}).then((res)=>{
+              console.log(res)
+              if (res.status != 200) {
+                this.$message({
+                  message: res.data.descript,
+                  type: 'error'
+                });
+              } else {
+                var data = res.data;
+                this.setSelectData(data,rank);
+              }
+              this.setSelectLoading(false,rank);
+
+            }).catch((err)=>{
+              this.setSelectLoading(false,rank);
+
+            })
+          }else{
+            this.setSelectLoading(false,rank);
+          }
+        }
+      },
+      setSelectData(data,rank){
+        switch (rank){
+          case 1:
+            this.academyData = data.data;
+            break;
+          case 2:
+            this.majorData = data.data;
+            break;
+          case 3:
+            this.classData = data.data;
+            break;
+        }
+      },
+      setSelectLoading(status,rank){
+        switch (rank){
+          case 1:
+            this.academyLoading = status;
+            break;
+          case 2:
+            this.majorLoading = status;
+            break;
+          case 3:
+            this.classLoading = status;
+            break;
+        }
+      }
+      ,
+      change(value){
+
       }
     },
     mounted() {
