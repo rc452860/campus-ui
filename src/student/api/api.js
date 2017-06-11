@@ -35,8 +35,12 @@ export const getUserList = params => {
 };
 
 export const getAcademyByname = params =>{
-    return axios.get(`${base}/academy`,{params:params})
+    return axios.get(`${base}/academy`,{params:params});
 };
+
+export const getPoolBuildBaseInfo = params =>{
+    return axios.get(`${base}/poorBuild`);
+}
 
 // export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
 

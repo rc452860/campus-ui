@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import {requestLogin,mode} from '../../api/api';
+    import {requestLogin,mode} from '../api/api';
     //import NProgress from 'nprogress'
     export default {
         data() {
@@ -66,7 +66,7 @@
                             } else {
                                 var cpIcardNo = data.cpIdCardNo;
                                 sessionStorage.setItem("login",cpIcardNo)
-                                this.$router.push({path: '/table'});
+                                this.$router.push({path: '/student'});
                             }
                         }).catch(error => {
                             this.$message({

@@ -16,6 +16,7 @@ const Index = r=>require.ensure([],()=>r(require('./views/Index.vue')),'common')
 const StudentList = r=>require.ensure([],()=>r(require('./student/views/CpStudents.vue')),'student')
 const StudentLogin = r=>require.ensure([],()=>r(require('./student/views/Login.vue')),'student')
 const StudentHome = r=>require.ensure([],()=>r(require('./student/views/Home.vue')),'student')
+const StudentPoolBuild = r=>require.ensure([],()=>r(require('./student/views/ApplyPoolBuild.vue')),'student')
 
 
 
@@ -53,7 +54,8 @@ let routes = [
     name: '学生功能',
     iconCls: 'el-icon-message',//图标样式class
     children: [
-      {path:"/student/list",component:StudentList,name:'学生列表'}
+      {path:"/student/list",component:StudentList,name:'学生列表'},
+      {path:"/student/ApplyPoolBuild",component:StudentPoolBuild,name:'建档申请'}
     ]
   },
   {
