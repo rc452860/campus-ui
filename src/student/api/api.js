@@ -3,6 +3,8 @@ import {stringify} from 'qs'
 let base = 'http://localhost:8080';
 
 
+axios.defaults.withCredentials = true
+
 axios.defaults.validateStatus = status => {
     return status < 404;
 }
