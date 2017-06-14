@@ -10,7 +10,7 @@
         </el-form-item>
         <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
         <el-form-item style="width:100%;">
-            <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">登录
+            <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit" :loading="logining">登录
             </el-button>
             <!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
         </el-form-item>
@@ -18,15 +18,15 @@
 </template>
 
 <script>
-    import {requestLogin,mode} from '../api/api';
+    import {requestLogin,mode} from '../../api/api';
     //import NProgress from 'nprogress'
     export default {
         data() {
             return {
                 logining: false,
                 ruleForm2: {
-                    account: '110103199005070931',
-                    checkPass: '110103199005070931'
+                    account: '10203',
+                    checkPass: '10203'
                 },
                 rules2: {
                     account: [
@@ -42,10 +42,10 @@
             };
         },
         methods: {
-            handleReset2() {
-                this.$refs.ruleForm2.resetFields();
-            },
-            handleSubmit2(ev) {
+//            handleReset2() {
+//                this.$refs.ruleForm2.resetFields();
+//            },
+            handleSubmit(ev) {
                 var _this = this;
                 this.$refs.ruleForm2.validate((valid) => {
                     if (valid) {
@@ -64,13 +64,11 @@
                                     type: 'error'
                                 });
                             } else {
-                                var cpIcardNo = data.cpIdCardNo;
-                                sessionStorage.setItem("login",cpIcardNo)
-                                this.$router.push({path: '/table'});
+                                sessionStorage.setItem("teacher",data)
+                                this.$router.push({path: '/teacher/openApply'});
                             }
                         }).catch(error => {
                             this.$message({
-
                                 message:error.data,
                                 type:'error'
                             })

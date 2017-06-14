@@ -17,6 +17,11 @@ const StudentList = r=>require.ensure([],()=>r(require('./student/views/CpStuden
 const StudentLogin = r=>require.ensure([],()=>r(require('./student/views/Login.vue')),'student')
 const StudentHome = r=>require.ensure([],()=>r(require('./student/views/Home.vue')),'student')
 const StudentPoolBuild = r=>require.ensure([],()=>r(require('./student/views/ApplyPoolBuild.vue')),'student')
+/*教师端*/
+const TeacherLogin = r=>require.ensure([],()=>r(require('./teacher/views/Login.vue')),'teacher')
+const TeacherHome = r=>require.ensure([],()=>r(require('./teacher/views/Home.vue')),'teacher')
+const TeacherOpenApply = r=>require.ensure([],()=>r(require('./teacher/views/OpenApply.vue')),'teacher')
+
 
 
 
@@ -34,20 +39,6 @@ let routes = [
         name: '',
         hidden: true
     },
-    // //{ path: '/main', component: Main },
-    // {
-    //     path: '/',
-    //     component: Home,
-    //     name: '导航一',
-    //     iconCls: 'el-icon-message',//图标样式class
-    //     children: [
-    //         {path: '/main', component: Main, name: '主页', hidden: true},
-    //         {path: '/table', component: Table, name: 'Table'},
-    //         {path: '/form', component: Form, name: 'Form'},
-    //         {path: '/user', component: User, name: '列表'},
-    //         {path:"/cpStudent",component:CpStudent,name:'学生列表'}
-    //     ]
-    // },
   {
     path: '/student',
     component: StudentHome,
@@ -66,53 +57,19 @@ let routes = [
   },
   {
     path: '/teacher',
-    component: StudentHome,
-    name: '学生功能',
+    component: TeacherHome,
+    name: '教师功能',
     iconCls: 'el-icon-message',//图标样式class
     children: [
-      {path:"/teacher/list",component:StudentList,name:'学生列表'}
+      {path:"/teacher/openApply",component:TeacherOpenApply,name:'开放申请'}
     ]
   },
   {
     path: '/teacher/login',
-    component: StudentLogin,
+    component: TeacherLogin,
     name: '',
     hidden: true
   }
-    /*{
-        path: '/',
-        component: Home,
-        name: '导航二',
-        iconCls: 'fa fa-id-card-o',
-        children: [
-            {path: '/page4', component: Page4, name: '页面4'},
-            {path: '/page5', component: Page5, name: '页面5'}
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '',
-        iconCls: 'fa fa-address-card',
-        leaf: true,//只有一个节点
-        children: [
-            {path: '/page6', component: Page6, name: '导航三'}
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: 'Charts',
-        iconCls: 'fa fa-bar-chart',
-        children: [
-            {path: '/echarts', component: echarts, name: 'echarts'}
-        ]
-    },
-    {
-        path: '*',
-        hidden: true,
-        redirect: {path: '/404'}
-    }*/
 ];
 
 export default routes;

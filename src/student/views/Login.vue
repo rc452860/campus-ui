@@ -64,13 +64,11 @@
                                     type: 'error'
                                 });
                             } else {
-                                var cpIcardNo = data.cpIdCardNo;
-                                sessionStorage.setItem("login",cpIcardNo)
+                                sessionStorage.setItem("login",data)
                                 this.$router.push({path: '/student'});
                             }
                         }).catch(error => {
                             this.$message({
-
                                 message:error.data,
                                 type:'error'
                             })

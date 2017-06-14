@@ -18,20 +18,17 @@ axios.defaults.validateStatus = status => {
 // }, function (err) {
 //     return Promise.reject(err);
 // });
-export const mode = {
-    teacher: {username: "teacher", password: ""},
-    student: {username: "student", password: ""},
-}
+
 
 export const requestLogin = params => {
-    return axios.post(`${base}/user/login`, params)
+    return axios.post(`${base}/teacher/login`, params)
 };
 export const getStudentList = params => {
-  return axios.get(`${base}/user`, {params: params});
+  return axios.get(`${base}/teacher`, {params: params});
 };
 
 export const getUserList = params => {
-    return axios.get(`${base}/user/all`, {params: params});
+    return axios.get(`${base}/teacher/all`, {params: params});
 };
 
 // export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
