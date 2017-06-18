@@ -19,12 +19,40 @@ axios.defaults.validateStatus = status => {
 //     return Promise.reject(err);
 // });
 
+axios.defaults.transformResponse = (data) => {
+  const dateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
+
+  function reviver(key, value) {
+    if (typeof value === "string" && dateFormat.test(value)) {
+      return new Date(value);
+    }
+
+    return value;
+  }
+  try{
+    const obj = JSON.parse(data, reviver);
+    console.log(obj)
+    return obj;
+  }catch(e){
+  }
+  return data;
+}
 
 export const requestLogin = params => {
     return axios.post(`${base}/teacher/login`, params)
 };
 
+export const requestOpenApply = params =>{
+    return axios.post(`${base}/teacher/open`, params)
+};
 
+export const requestDocTagList = params =>{
+  return axios.get(`${base}/doctag`, params)
+};
+
+export const requestDelDocTags = params =>{
+  return axios.delete(`${base}/doctag`, params)
+};
 
 // export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
 

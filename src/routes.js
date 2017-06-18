@@ -21,6 +21,7 @@ const StudentPoolBuild = r=>require.ensure([],()=>r(require('./student/views/App
 const TeacherLogin = r=>require.ensure([],()=>r(require('./teacher/views/Login.vue')),'teacher')
 const TeacherHome = r=>require.ensure([],()=>r(require('./teacher/views/Home.vue')),'teacher')
 const TeacherOpenApply = r=>require.ensure([],()=>r(require('./teacher/views/OpenApply.vue')),'teacher')
+const DocTagList = r=>require.ensure([],()=>r(require('./teacher/views/DocTagList.vue')),'teacher')
 
 
 
@@ -61,7 +62,9 @@ let routes = [
     name: '教师功能',
     iconCls: 'el-icon-message',//图标样式class
     children: [
-      {path:"/teacher/openApply",component:TeacherOpenApply,name:'开放申请'}
+      {path:"/teacher/openApply",component:TeacherOpenApply,name:'开放申请'},
+      {path:"/teacher/docTagList",component:DocTagList,name:'文档标签列表'}
+
     ]
   },
   {

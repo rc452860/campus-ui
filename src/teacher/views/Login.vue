@@ -69,7 +69,7 @@
                             }
                         }).catch(error => {
                             this.$message({
-                                message:error.data,
+                                message:error.data || '找不到服务器地址',
                                 type:'error'
                             })
                           this.logining = false;

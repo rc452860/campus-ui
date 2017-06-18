@@ -134,11 +134,11 @@
     mounted() {
       this.menu = this.$router.options.routes.filter(m=>m.path.indexOf("teacher")>=0)
       var user = sessionStorage.getItem('teacher');
-      if (user) {
-        user = JSON.parse(user);
-        this.sysUserName = user.name || '';
-        this.sysUserAvatar = user.avatar || '';
-      }
+//      if (user) {
+//        user = JSON.parse(user);
+//        this.sysUserName = user.name || '';
+//        this.sysUserAvatar = user.avatar || '';
+//      }
     }
   }
 </script>
