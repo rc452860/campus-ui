@@ -1,6 +1,5 @@
 <template>
-    <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px"
-             class="demo-ruleForm login-container">
+    <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
         <h3 class="title">教师登陆</h3>
         <el-form-item prop="account">
             <el-input type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="账号"></el-input>
@@ -18,93 +17,98 @@
 </template>
 
 <script>
-    import {requestLogin,mode} from '../../api/api';
-    //import NProgress from 'nprogress'
-    export default {
-        data() {
-            return {
-                logining: false,
-                ruleForm2: {
-                    account: '10203',
-                    checkPass: '10203'
-                },
-                rules2: {
-                    account: [
-                        {required: true, message: '请输入账号', trigger: 'blur'},
-                        //{ validator: validaePass }
-                    ],
-                    checkPass: [
-                        {required: true, message: '请输入密码', trigger: 'blur'},
-                        //{ validator: validaePass2 }
-                    ]
-                },
-                checked: true
-            };
-        },
-        methods: {
-//            handleReset2() {
-//                this.$refs.ruleForm2.resetFields();
-//            },
-            handleSubmit(ev) {
-                var _this = this;
-                this.$refs.ruleForm2.validate((valid) => {
-                    if (valid) {
-                        //_this.$router.replace('/table');
-                        this.logining = true;
-                        //NProgress.start();
-                        var loginParams = {username: this.ruleForm2.account, password: this.ruleForm2.checkPass};
-                        requestLogin(loginParams).then(response => {
-                            console.log(response)
-                            this.logining = false;
-                            //NProgress.done();
-                            let {status,data,descript} = response.data;
-                            if (response.status !== 200 || status != "success") {
-                                this.$message({
-                                    message: response.msg,
-                                    type: 'error'
-                                });
-                            } else {
-                                sessionStorage.setItem("teacher",data)
-                                this.$router.push({path: '/teacher/openApply'});
-                            }
-                        }).catch(error => {
-                            this.$message({
-                                message:error.data || '找不到服务器地址',
-                                type:'error'
-                            })
-                          this.logining = false;
-                        });
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
-            }
+import { requestLogin, mode } from '../../api/api';
+//import NProgress from 'nprogress'
+export default {
+    data() {
+        return {
+            logining: false,
+            ruleForm2: {
+                account: '10203',
+                checkPass: '10203'
+            },
+            rules2: {
+                account: [
+                    { required: true, message: '请输入账号', trigger: 'blur' },
+                    //{ validator: validaePass }
+                ],
+                checkPass: [
+                    { required: true, message: '请输入密码', trigger: 'blur' },
+                    //{ validator: validaePass2 }
+                ]
+            },
+            checked: true
+        };
+    },
+    methods: {
+        //            handleReset2() {
+        //                this.$refs.ruleForm2.resetFields();
+        //            },
+        handleSubmit(ev) {
+            var _this = this;
+            this.$refs.ruleForm2.validate((valid) => {
+                if (valid) {
+                    //_this.$router.replace('/table');
+                    this.logining = true;
+                    //NProgress.start();
+                    var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
+                    requestLogin(loginParams).then(response => {
+                        this.logining = false;
+                        //NProgress.done();
+                        let { status, data, descript } = response.data;
+                        if (response.status !== 200 || status != "success") {
+                            throw response
+                        } else {
+                            sessionStorage.setItem("teacher", data)
+                            this.$router.push({ path: '/teacher/openApply' });
+                        }
+                    }).catch(error => {
+                        var message = null;
+                        try {
+                            console.log(error)
+                            var descript = error.data.descript
+                            message = (descript != null && descript.trim() != '') && descript;
+                        } catch (e) {
+                            message = "找不到服务器地址"
+                        }
+                        this.$message({
+                            message: message,
+                            type: 'error'
+                        })
+
+                        this.logining = false;
+                    });
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
         }
     }
+}
 
 </script>
 
 <style lang="scss" scoped>
-    .login-container {
-        /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
-        -webkit-border-radius: 5px;
-        border-radius: 5px;
-        -moz-border-radius: 5px;
-        background-clip: padding-box;
-        margin: 180px auto;
-        width: 350px;
-        padding: 35px 35px 15px 35px;
-        background: #fff;
-        border: 1px solid #eaeaea;
-        box-shadow: 0 0 25px #cac6c6;
-        .title {
-            margin: 0px auto 40px auto;
-            text-align: center;
-            color: #505458;
-        }
-        .remember {
-            margin: 0px 0px 35px 0px;
-        }
+.login-container {
+    /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    background-clip: padding-box;
+    margin: 180px auto;
+    width: 350px;
+    padding: 35px 35px 15px 35px;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 0 25px #cac6c6;
+    .title {
+        margin: 0px auto 40px auto;
+        text-align: center;
+        color: #505458;
     }
+    .remember {
+        margin: 0px 0px 35px 0px;
+    }
+}
 </style>

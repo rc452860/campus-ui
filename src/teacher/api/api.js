@@ -31,7 +31,6 @@ axios.defaults.transformResponse = (data) => {
   }
   try{
     const obj = JSON.parse(data, reviver);
-    console.log(obj)
     return obj;
   }catch(e){
   }
@@ -51,7 +50,7 @@ export const requestDocTagList = params =>{
 };
 
 export const requestDelDocTags = params =>{
-  return axios.delete(`${base}/doctag`, params)
+  return axios.delete(`${base}/doctag`, {data:params})
 };
 
 // export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
