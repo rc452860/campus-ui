@@ -22,6 +22,7 @@ const TeacherLogin = r=>require.ensure([],()=>r(require('./teacher/views/Login.v
 const TeacherHome = r=>require.ensure([],()=>r(require('./teacher/views/Home.vue')),'teacher')
 const TeacherOpenApply = r=>require.ensure([],()=>r(require('./teacher/views/OpenApply.vue')),'teacher')
 const DocTagList = r=>require.ensure([],()=>r(require('./teacher/views/DocTagList.vue')),'teacher')
+const Upload = r=>require.ensure([],()=>r(require('./teacher/views/Upload.vue')),'teacher')
 
 
 
@@ -63,8 +64,8 @@ let routes = [
     iconCls: 'el-icon-message',//图标样式class
     children: [
       {path:"/teacher/openApply",component:TeacherOpenApply,name:'开放申请'},
-      {path:"/teacher/docTagList",component:DocTagList,name:'文档标签列表'}
-
+      {path:"/teacher/docTagList",component:DocTagList,name:'文档标签列表'},
+      {path:"/teacher/upload",component:Upload,name:'测试上传'}
     ]
   },
   {
