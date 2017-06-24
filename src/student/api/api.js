@@ -44,6 +44,14 @@ export const getPoolBuildBaseInfo = params =>{
     return axios.get(`${base}/poorBuild`);
 }
 
+export const postPoolBuildInfo = params =>{
+  return axios.post(`${base}/poorBuild/application`,params);
+}
+
+export const getStatus = () =>{
+  return axios.get(`${base}/poorBuild/status`)
+}
+
 // export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
 
 // export const getUserList = params => { return axios.get(`${base}/user/list`, { params: params }); };

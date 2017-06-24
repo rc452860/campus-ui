@@ -6,29 +6,30 @@
                                 </div>
                                 <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
                             </el-upload>-->
-    <!--<el-upload class="avatar-uploader" action="http://localhost:8080/common" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+    <el-upload class="avatar-uploader" action="http://localhost:8080/common" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                         <img v-if="imageUrl" :src="imageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                    </el-upload>-->
-    <el-form :model="form">
-        <el-upload class="upload-demo" ref="upload" action="http://localhost:8080/common/v2" 
-        :on-preview="handlePreview" 
+                    </el-upload>
+    <!--<el-form :model="form">
+        <el-upload class="upload-demo" ref="upload" action="http://localhost:8080/common/v2"
+        :on-preview="handlePreview"
         :on-remove="handleRemove"
-         :file-list="form.filelist" 
-         :auto-upload="false" 
+         :file-list="form.filelist"
+         :auto-upload="false"
          :on-change="change"
          >
             <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
         <el-input v-model="form.name"></el-input>
         <el-button @click.prevent="submit">提交</el-button>
-    </el-form>
+    </el-form>-->
 </template>
 <script>
 import {testUpload} from '../api/api.js'
 export default {
     data() {
         return {
+          imageUrl:null,
             form: {
                 filelist:[],
                 file: [],

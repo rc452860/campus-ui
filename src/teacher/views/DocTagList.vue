@@ -14,7 +14,7 @@
         </el-form-item>
       </el-form>
     </el-col>
-  
+
     <!--列表-->
     <el-table :data="list.content" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
       <el-table-column type="selection" width="55">
@@ -35,14 +35,14 @@
         </template>
       </el-table-column>
     </el-table>
-  
+
     <!--工具条-->
     <el-col :span="24" class="toolbar">
       <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
       <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="list.size" :total="list.totalPages" style="float:right;">
       </el-pagination>
     </el-col>
-  
+
     <!--编辑界面-->
     <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
       <el-form ref="editForm" :model="editForm" label-width="120px" @submit.prevent="onSubmit">
@@ -64,7 +64,7 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-  
+
     <!--新增界面-->
     <el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
       <el-form ref="addForm" :model="addForm" label-width="120px" @submit.prevent="onSubmit">
@@ -204,7 +204,6 @@ export default {
           if (response.status !== 200 || status != "success") {
             throw response
           } else {
-            sessionStorage.setItem("teacher", data);
             this.getList();
           }
         }).catch((error) => {
@@ -289,17 +288,44 @@ export default {
       });
     },
     selsChange: function (sels) {
+    	console.log(sels)
       this.sels = sels;
     },
     //批量删除
     batchRemove: function () {
-      var ids = this.sels.map(item => item.id).toString();
+      var ids = this.sels.map(item => item.cpId)
+      console.log(ids)
       this.$confirm('确认删除选中记录吗？', '提示', {
         type: 'warning'
       }).then(() => {
         this.listLoading = true;
         //NProgress.start();
-        let para = { ids: ids };
+        requestDelDocTags(ids).then((response) => {
+          let { status, data, descript } = response.data;
+          if (response.status !== 200 || status != "success") {
+            throw response
+          } else {
+          	this.$message({
+              message:"删除成功",
+              type:'success'
+            })
+            this.getList();
+          }
+        }).catch((error) => {
+          console.log(error)
+          var message = null;
+          try {
+            var descript = error.data.descript
+            message = (descript != null && descript.trim() != '') && descript;
+          } catch (e) {
+            message = "服务器错误"
+          }
+          this.$message({
+            message: message,
+            type: 'error'
+          })
+          this.listLoading = false;
+        })
 
       }).catch(() => {
 
