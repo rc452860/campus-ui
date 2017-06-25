@@ -132,7 +132,7 @@
       }
     },
     mounted() {
-      this.menu = this.$router.options.routes.filter(m=>m.path.indexOf("teacher")>=0)
+      this.menu = this.$router.options.routes.filter(m=>m.path.indexOf("teacher")>=0&&!m.hidden)
       var user = sessionStorage.getItem('teacher');
 //      if (user) {
 //        user = JSON.parse(user);

@@ -23,6 +23,7 @@ const TeacherHome = r=>require.ensure([],()=>r(require('./teacher/views/Home.vue
 const TeacherOpenApply = r=>require.ensure([],()=>r(require('./teacher/views/OpenApply.vue')),'teacher')
 const DocTagList = r=>require.ensure([],()=>r(require('./teacher/views/DocTagList.vue')),'teacher')
 const Upload = r=>require.ensure([],()=>r(require('./teacher/views/Upload.vue')),'teacher')
+const DocList = r=>require.ensure([],()=>r(require('./teacher/views/DocList.vue')),'teacher')
 
 
 
@@ -65,7 +66,8 @@ let routes = [
     children: [
       {path:"/teacher/openApply",component:TeacherOpenApply,name:'开放申请'},
       {path:"/teacher/docTagList",component:DocTagList,name:'文档标签列表'},
-      {path:"/teacher/upload",component:Upload,name:'测试上传'}
+      {path:"/teacher/upload",component:Upload,name:'测试上传'},
+      {path:"/teacher/docList/:id",component:DocList,name:'文档列表'}
     ]
   },
   {

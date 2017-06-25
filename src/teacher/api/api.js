@@ -6,6 +6,8 @@ let base = 'http://localhost:8080';
 axios.defaults.validateStatus = status => {
     return status < 404;
 }
+axios.defaults.withCredentials = true
+
 
 // axios.interceptors.request.use(function (config) {
 //     const token = sessionStorage.getItem("login");
@@ -56,6 +58,10 @@ export const requestDelDocTags = params =>{
 export const testUpload = params =>{
   return axios.post(`${base}/common/v2`, params)
 };
+
+export const requestDocList= params =>{
+  return axios.get(`${base}/doctag/doc/list`, {params:params})
+}
 
 
 

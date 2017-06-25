@@ -135,7 +135,7 @@
       }
     },
     mounted() {
-      this.menu = this.$router.options.routes.filter(m=>m.path.indexOf("student")>=0)
+      this.menu = this.$router.options.routes.filter(m=>m.path.indexOf("student")>=0&&!m.hidden)
       var user = sessionStorage.getItem('user');
       if (user) {
         user = JSON.parse(user);

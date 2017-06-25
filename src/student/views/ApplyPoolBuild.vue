@@ -255,9 +255,8 @@
     <el-steps ref="steps" center  :space="400" :active="active" align-center finish-status="success">
       <template  v-for="(item,index) in steps">
         <el-step :status="item.status">
-          <span v-if="item.status == 'error'" class="step-title" slot="title" @click.prevent="reviewDoc(index)">{{ item.title }}</span>
-          <span v-else class="step-title" slot="title">{{ item.title }}</span>
-          <span slot="description" class="description" v-if="item.descript">{{ item.descript }}，点击标题修改</span>
+          <span class="step-title" slot="title">{{ item.title }}</span>
+          <p slot="description" class="description" v-if="item.descript">{{ item.descript }}<br/><a href="#" @click.prevent="reviewDoc(index)">点击修改</a></p>
         </el-step>
       </template>
     </el-steps>
@@ -347,6 +346,7 @@
     methods: {
       onSubmit() {
         console.log('submit!');
+        console.log(this.form)
         postPoolBuildInfo(this.form).then((res)=>{
           if (res.status != 200 || res.data.status != "success") {
             throw res
@@ -452,7 +452,7 @@
           if(this.cpSuperResult == 2){
             this.steps[3].status = 'error';
             this.steps[1].descript = this.cpSuperRemarks;
-            
+
             // this.$nextTick(()=> {
             //   this.$refs.steps.steps[active-1]['status'] = "error"
             //   this.$refs.steps.steps[active-1]['description'] = this.cpSuperRemarks
@@ -543,5 +543,10 @@
   .step-title{
     text-decoration-line: none;
     cursor: pointer;
+  }
+  .description{
+    position: relative;
+    left: -171px;
+    text-align: center;
   }
 </style>
