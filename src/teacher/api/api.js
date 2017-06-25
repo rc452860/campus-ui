@@ -57,6 +57,8 @@ export const testUpload = params =>{
   return axios.post(`${base}/common/v2`, params)
 };
 
+
+
 // export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
 
 // export const getUserList = params => { return axios.get(`${base}/user/list`, { params: params }); };

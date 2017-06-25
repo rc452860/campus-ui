@@ -1,5 +1,5 @@
 <template>
-  <el-form v-if="hasPost == false && open == true" ref="form" :model="form" label-width="140px" @submit.prevent="onSubmit"
+  <el-form v-if="(hasPost == false && open == true)||review == true" ref="form" :model="form" label-width="140px" @submit.prevent="onSubmit"
            style="margin:20px;width:60%;min-width:600px;">
     <el-row>
       <el-col :span="12">
@@ -252,10 +252,14 @@
     </el-row>
   </el-form>
   <section v-else-if="hasPost == true && open == true">
-    <el-steps ref="steps" center="center"  :space="400" :active="active" finish-status="success">
-      <el-step title="待审核"></el-step>
-      <el-step title="班主任审核"></el-step>
-      <el-step title="教务处审核"></el-step>
+    <el-steps ref="steps" center  :space="400" :active="active" align-center finish-status="success">
+      <template  v-for="(item,index) in steps">
+        <el-step :status="item.status">
+          <span v-if="item.status == 'error'" class="step-title" slot="title" @click.prevent="reviewDoc(index)">{{ item.title }}</span>
+          <span v-else class="step-title" slot="title">{{ item.title }}</span>
+          <span slot="description" class="description" v-if="item.descript">{{ item.descript }}，点击标题修改</span>
+        </el-step>
+      </template>
     </el-steps>
   </section>
   <section v-else>
@@ -267,13 +271,14 @@
 </template>
 
 <script>
-  import {getPoolBuildBaseInfo,postPoolBuildInfo,getStatus} from "../api/api.js";
+  import {getPoolBuildBaseInfo,postPoolBuildInfo,getStatus,getReview} from "../api/api.js";
   export default {
     data() {
       return {
       	active:0,
         open: false,
         hasPost:false,
+        review:false,
         currentState:0,
         cpCounselorResult:0,//辅导员审核
         cpCounselorRemarks:null,//审核摘要
@@ -325,7 +330,18 @@
           cpLowSecurity: null,
           cpCondition: null,
           cpAwards: null,
-        }
+        },
+        steps:[
+          {
+            title:"待审核",
+          },
+          {
+            title:"老师审核",
+          },
+          {
+            title:"学工部审核",
+          }
+        ]
       }
     },
     methods: {
@@ -370,6 +386,30 @@
         }
         return isJPG && isLt2M;
       },
+      reviewDoc(i){
+        // console.log(i)
+        getReview().then(res=>{
+          console.log(res)
+          if (res.status != 200 || res.data.status != "success") {
+            throw res
+          } else {
+            this.review = true;
+          	this.form = res.data.data;
+          }
+        }).catch(err=>{
+          var message = null;
+          try {
+            var descript = err.data.descript
+            message = (descript != null && descript.trim() != '') && descript;
+          } catch (e) {
+            message = "服务器内部错误"
+          }
+          this.$message({
+            message: message,
+            type: 'error'
+          })
+        })
+      }
     },
     computed: {
       disabled: function () {
@@ -398,20 +438,25 @@
             this.active++
           }
           if(this.cpCounselorResult == 2){
-            this.$nextTick(()=> {
-            	console.log(this.$refs.steps.steps[1])
-              this.$refs.steps.steps[this.active-1]['status'] = "error"
-              this.$refs.steps.steps[this.active-1]['description'] = this.cpCounselorRemarks
-            })
+            this.steps[1].status = 'error';
+            this.steps[1].descript = this.cpCounselorRemarks;
+            // this.$nextTick(()=> {
+            // 	console.log(this.$refs.steps.steps[1])
+            //   this.$refs.steps.steps[this.active-1]['status'] = "error"
+            //   this.$refs.steps.steps[this.active-1]['description'] = this.cpCounselorRemarks
+            // })
             /*this.$refs.steps.steps[active-1]['status'] = "error"
             this.$refs.steps.steps[active-1]['description'] = this.cpCounselorRemarks*/
             return;
           }
           if(this.cpSuperResult == 2){
-            this.$nextTick(()=> {
-              this.$refs.steps.steps[active-1]['status'] = "error"
-              this.$refs.steps.steps[active-1]['description'] = this.cpSuperRemarks
-            })
+            this.steps[3].status = 'error';
+            this.steps[1].descript = this.cpSuperRemarks;
+            
+            // this.$nextTick(()=> {
+            //   this.$refs.steps.steps[active-1]['status'] = "error"
+            //   this.$refs.steps.steps[active-1]['description'] = this.cpSuperRemarks
+            // })
             return;
           }
         }
@@ -494,5 +539,9 @@
     width: 178px;
     height: 178px;
     display: block;
+  }
+  .step-title{
+    text-decoration-line: none;
+    cursor: pointer;
   }
 </style>
