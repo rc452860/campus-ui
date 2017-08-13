@@ -1,17 +1,9 @@
 //test
-import {requestLogin} from '../api/api';
-
-export const increment = ({commit}) => {
-    commit('INCREMENT')
-}
-export const decrement = ({commit}) => {
-    commit('DECREMENT')
-}
+import {requestInfo} from '../teacher/api/api';
 
 
-export const login = ({commit, state}, data) => {
-    requestLogin({username: data.username, password: data.password}).then(data => {
-        let {access_token} = data;
-        commit("LOGIN", {token: access_token})
-    })
-}
+export const TEACHER_INFO_ACITON = ({commit, state}) => {
+  requestInfo().then((res) => {
+    commit("TEACHER_INFO", res.data.data)
+  })
+};

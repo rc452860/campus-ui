@@ -11,7 +11,7 @@
       </el-col>
       <el-col :span="4" class="userinfo">
         <el-dropdown trigger="hover">
-          <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar"/> {{sysUserName}}</span>
+          <span class="el-dropdown-link userinfo-inner">当前用户:{{studentInfo.cpName}}</span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>我的消息</el-dropdown-item>
             <el-dropdown-item>设置</el-dropdown-item>
@@ -83,23 +83,24 @@
 </template>
 
 <script>
+  import {getCurrentStudentInfo} from "../api/api"
   export default {
     data() {
       return {
-      	menu:null,
-        sysName: 'VUEADMIN',
-        collapsed: false,
-        sysUserName: '',
+        menu         : null,
+        sysName      : '学生端',
+        collapsed    : false,
+        sysUserName  : '',
         sysUserAvatar: '',
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+        studentInfo  : {
+          cpAcademy : {},
+          cpClass   : {},
+          cpIdCardNo: "",
+          cpMajor   : {},
+          cpName    : "学生姓名",
+          cpOldName : "",
+          cpSex     : "",
+          cpSno     : "",
         }
       }
     },
@@ -116,7 +117,7 @@
       handleselect: function (a, b) {
       },
       //退出登录
-      logout: function () {
+      logout      : function () {
         var _this = this;
         this.$confirm('确认退出吗?', '提示', {
           //type: 'warning'
@@ -127,7 +128,7 @@
         });
       },
       //折叠导航栏
-      collapse: function () {
+      collapse    : function () {
         this.collapsed = !this.collapsed;
       },
       showMenu(i, status){
@@ -135,13 +136,23 @@
       }
     },
     mounted() {
-      this.menu = this.$router.options.routes.filter(m=>m.path.indexOf("student")>=0&&!m.hidden)
-      var user = sessionStorage.getItem('user');
-      if (user) {
-        user = JSON.parse(user);
-        this.sysUserName = user.name || '';
-        this.sysUserAvatar = user.avatar || '';
-      }
+      this.menu = this.$router.options.routes.filter(m => m.path.indexOf("student") >= 0 && !m.hidden);
+//      var user  = sessionStorage.getItem('user');
+//      if (user) {
+//        user               = JSON.parse(user);
+//        this.sysUserName   = user.name || '';
+//        this.sysUserAvatar = user.avatar || '';
+//      }
+
+      getCurrentStudentInfo().then(res => {
+        let {data}       = res.data;
+        this.studentInfo = data;
+        console.clear();
+        console.log(data)
+      }).catch(err => {
+        console.log(err)
+      })
+
     }
   }
 </script>

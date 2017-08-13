@@ -49,29 +49,19 @@
                 var _this = this;
                 this.$refs.ruleForm2.validate((valid) => {
                     if (valid) {
-                        //_this.$router.replace('/table');
                         this.logining = true;
-                        //NProgress.start();
                         var loginParams = {username: this.ruleForm2.account, password: this.ruleForm2.checkPass};
                         requestLogin(loginParams).then(response => {
-                            console.log(response)
+                          console.log(response);
                             this.logining = false;
-                            //NProgress.done();
-                            let {status,data,descript} = response.data;
-                            if (response.status !== 200 || status != "success") {
-                                this.$message({
-                                    message: response.msg,
-                                    type: 'error'
-                                });
-                            } else {
-                                sessionStorage.setItem("login",data)
-                                this.$router.push({path: '/student'});
-                            }
+                          let {data}      = response.data;
+                          sessionStorage.setItem("SESSION_STUDENT", data);
+                          this.$router.push({path: '/student'});
                         }).catch(error => {
                             this.$message({
                                 message:error.data,
                                 type:'error'
-                            })
+                            });
                           this.logining = false;
                         });
                     } else {

@@ -1,4 +1,3 @@
-import babelpolyfill from 'babel-polyfill'
 import Vue from 'vue'
 import App from './App'
 import ElementUI from 'element-ui'
@@ -15,15 +14,18 @@ import routes from './routes'
 // Mock.bootstrap();
 import 'font-awesome/css/font-awesome.min.css'
 
-Vue.use(ElementUI)
-Vue.use(VueRouter)
-Vue.use(Vuex)
+import VueImg from './lib/v-img';
+
+Vue.use(ElementUI);
+Vue.use(VueRouter);
+Vue.use(Vuex);
+Vue.use(VueImg);
 
 //NProgress.configure({ showSpinner: false });
 
 const router = new VueRouter({
     routes
-})
+});
 
 /*router.beforeEach((to, from, next) => {
     //NProgress.start();
@@ -43,12 +45,14 @@ const router = new VueRouter({
 //NProgress.done();
 //});
 
-new Vue({
+let vue = new Vue({
     //el: '#app',
     //template: '<App/>',
     router,
     store,
     //components: { App }
     render: h => h(App)
-}).$mount('#app')
+});
+vue.$mount('#app');
 
+export default vue

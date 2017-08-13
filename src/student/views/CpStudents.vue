@@ -9,14 +9,12 @@
         <el-form-item>
           <el-button type="primary" v-on:click="getUsers">查询</el-button>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleAdd">新增</el-button>
-        </el-form-item>
       </el-form>
     </el-col>
 
     <!--列表-->
-    <el-table :data="content" height="700" highlight-current-row v-loading="listLoading" @selection-change="selsChange"
+    <el-table :data="list.content" height="700" highlight-current-row v-loading="listLoading"
+              @selection-change="selsChange"
               style="width: 100%;">
       <el-table-column  type="selection" width="55">
       </el-table-column>
@@ -57,8 +55,8 @@
     <!--工具条-->
     <el-col :span="24" class="toolbar">
       <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20"
-                     :total="totalPages" style="float:right;">
+      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="list.size"
+                     :total="list.totalElements" style="float:right;">
       </el-pagination>
     </el-col>
 
@@ -135,37 +133,6 @@
         <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
       </div>
     </el-dialog>
-
-    <!--新增界面-->
-    <el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
-      <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-        <el-form-item label="用户名" prop="name">
-          <el-input v-model="addForm.name" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="name">
-          <el-input v-model="addForm.name" auto-complete="off"></el-input>
-        </el-form-item>
-        <!--<el-form-item label="性别">
-            <el-radio-group v-model="addForm.sex">
-                <el-radio class="radio" :label="1">男</el-radio>
-                <el-radio class="radio" :label="0">女</el-radio>
-            </el-radio-group>
-        </el-form-item>
-        <el-form-item label="年龄">
-            <el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
-        </el-form-item>
-        <el-form-item label="生日">
-            <el-date-picker type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="地址">
-            <el-input type="textarea" v-model="addForm.addr"></el-input>
-        </el-form-item>-->
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click.native="addFormVisible = false">取消</el-button>
-        <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
-      </div>
-    </el-dialog>
   </section>
 </template>
 
@@ -179,33 +146,36 @@
     components: {ElInput},
     data() {
       return {
-        filters: {
+        filters        : {
           name: ''
         },
-        content: [],
-        last: false,
-        totalPages: 0,
-        totalElements: 0,
-        number: 0,
-        size: 20,
-        sort: null,
-        numberOfElements: 20,
-        first: false,
-        listLoading: false,
-        sels: [],//列表选中列
+        list           : {
+          "content"         : [],
+          "totalPages"      : 0,
+          "totalElements"   : 0,
+          "last"            : false,
+          "number"          : 0,
+          "size"            : 20,
+          "sort"            : null,
+          "numberOfElements": 0,
+          "first"           : true
+        },
+        listLoading    : false,
+        sels           : [],//列表选中列
         editFormVisible: false,//编辑界面是否显示
-        editLoading: false,
-        editFormRules: {
+        editLoading    : false,
+        editFormRules  : {
           name: [
             {required: true, message: '请输入姓名', trigger: 'blur'}
           ]
         },
         //编辑界面数据
-        editForm: {
-          cpSex:"男",
+        editForm       : {
+          cpName   : '',
+          cpSex    :"男",
           cpAcademy:[],
-          cpMajor:[],
-          cpClass:[]
+          cpMajor  :[],
+          cpClass  :[]
         },
 
         addFormVisible: false,//新增界面是否显示
@@ -215,15 +185,6 @@
             {required: true, message: '请输入姓名', trigger: 'blur'}
           ]
         },
-        //新增界面数据
-        addForm: {
-          name: '',
-          sex: -1,
-          age: 0,
-          birth: '',
-          addr: ''
-        },
-
         academyLoading:false,
         academyData:[],
         majorLoading:false,
@@ -238,14 +199,14 @@
         return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
       },
       handleCurrentChange(val) {
-        this.page = val;
+        this.number = val - 1;
         this.getUsers();
       },
       //获取用户列表
       getUsers() {
         let para = {
-          page: this.number,
-          size: this.size
+          page: this.list.number,
+          size: this.list.size
         };
         this.listLoading = true;
         //NProgress.start();
@@ -257,21 +218,13 @@
             });
           } else {
             var data = res.data;
-            console.log(data)
-            this.content = data.content;
-            this.last = data.last;
-            this.totalPages = data.totalPages;
-            this.totalElements = data.totalElements;
-            this.number = data.number;
-            this.size = data.size;
-            this.sort = data.sort;
-            this.numberOfElements = data.numberOfElements;
-            this.first = this.first;
+            console.log(data);
+            this.list        = data;
             this.listLoading = false;
             //NProgress.done();
           }
         }).catch(error => {
-        	console.log(error)
+          console.log(error);
           this.$message({
             message: "服务器内部错误",
             type: 'error'
@@ -302,19 +255,8 @@
       //显示编辑界面
       handleEdit: function (index, row) {
         this.editFormVisible = true;
-        console.log(row)
+        console.log(row);
         this.editForm = Object.assign({}, row);
-      },
-      //显示新增界面
-      handleAdd: function () {
-        this.addFormVisible = true;
-        this.addForm = {
-          name: '',
-          sex: -1,
-          age: 0,
-          birth: '',
-          addr: ''
-        };
       },
       //编辑
       editSubmit: function () {
@@ -334,30 +276,6 @@
                 });
                 this.$refs['editForm'].resetFields();
                 this.editFormVisible = false;
-                this.getUsers();
-              });
-            });
-          }
-        });
-      },
-      //新增
-      addSubmit: function () {
-        this.$refs.addForm.validate((valid) => {
-          if (valid) {
-            this.$confirm('确认提交吗？', '提示', {}).then(() => {
-              this.addLoading = true;
-              //NProgress.start();
-              let para = Object.assign({}, this.addForm);
-              para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-              addUser(para).then((res) => {
-                this.addLoading = false;
-                //NProgress.done();
-                this.$message({
-                  message: '提交成功',
-                  type: 'success'
-                });
-                this.$refs['addForm'].resetFields();
-                this.addFormVisible = false;
                 this.getUsers();
               });
             });
@@ -394,7 +312,7 @@
           if(query!=""){
             this.setSelectLoading(true,rank);
             getAcademyByname({name:query,rank:rank}).then((res)=>{
-              console.log(res)
+              console.log(res);
               if (res.status != 200) {
                 this.$message({
                   message: res.data.descript,
